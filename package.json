@@ -1,0 +1,72 @@
+{
+  "name": "feature-board",
+  "version": "1.0.0",
+  "private": true,
+  "type": "module",
+  "engines": {
+    "node": ">=22.12.0"
+  },
+  "scripts": {
+    "dev": "concurrently --kill-others \"npm:dev:server\" \"npm:dev:client\"",
+    "dev:server": "tsx watch server/index.ts",
+    "dev:client": "vite --host 127.0.0.1",
+    "build": "npm run build:client && npm run build:server",
+    "build:client": "vite build",
+    "build:server": "tsc -p tsconfig.server.build.json",
+    "start": "node dist/server/index.js",
+    "type-check": "tsc -p tsconfig.client.json && tsc -p tsconfig.server.json",
+    "lint": "eslint .",
+    "format": "prettier --write \"src/**/*.{ts,tsx,css}\" \"server/**/*.ts\" \"shared/**/*.ts\" \"tests/**/*.{ts,tsx}\" \"scripts/**/*.ts\" \"prisma/seed.ts\" \"*.config.{js,ts}\" package.json tsconfig.client.json tsconfig.server.json tsconfig.server.build.json index.html README.md && prisma format",
+    "test": "tsx scripts/run-integration-tests.ts",
+    "test:ui": "vitest run --config vitest.ui.config.ts",
+    "test:integration": "tsx scripts/run-integration-tests.ts",
+    "db:migrate:dev": "prisma migrate dev",
+    "db:migrate:deploy": "prisma migrate deploy",
+    "db:seed": "prisma db seed",
+    "db:generate": "prisma generate",
+    "postinstall": "prisma generate"
+  },
+  "dependencies": {
+    "@prisma/adapter-pg": "^7.10.1",
+    "@prisma/client": "^7.10.1",
+    "bcryptjs": "^3.0.3",
+    "dotenv": "^17.2.3",
+    "express": "^5.3.0",
+    "express-rate-limit": "^8.7.4",
+    "pg": "^8.23.1",
+    "react": "^19.3.1",
+    "react-dom": "^19.3.1",
+    "react-router-dom": "^7.18.5",
+    "zod": "^4.6.7"
+  },
+  "devDependencies": {
+    "@eslint/js": "^10.0.1",
+    "@tailwindcss/vite": "^4.3.5",
+    "@testing-library/react": "^16.3.3",
+    "@types/express": "^5.0.6",
+    "@types/node": "^26.6.6",
+    "@types/pg": "^8.23.1",
+    "@types/react": "^19.3.0",
+    "@types/react-dom": "^19.3.0",
+    "@types/supertest": "^7.2.1",
+    "@vitejs/plugin-react": "^6.3.0",
+    "concurrently": "^10.0.7",
+    "eslint": "^10.14.0",
+    "eslint-config-prettier": "^10.1.8",
+    "eslint-plugin-react-hooks": "^7.1.1",
+    "eslint-plugin-react-refresh": "^0.5.7",
+    "jsdom": "^31.0.1",
+    "prettier": "^3.10.1",
+    "prisma": "^7.10.1",
+    "supertest": "^7.3.2",
+    "tailwindcss": "^4.3.5",
+    "tsx": "^4.20.6",
+    "typescript": "^5.9.3",
+    "typescript-eslint": "^8.72.2",
+    "vite": "^8.3.8",
+    "vitest": "^5.1.0"
+  },
+  "overrides": {
+    "minimatch": "^11.0.8"
+  }
+}

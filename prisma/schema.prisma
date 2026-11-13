@@ -1,0 +1,68 @@
+generator client {
+  provider = "prisma-client"
+  output   = "../generated/prisma"
+}
+
+datasource db {
+  provider = "postgresql"
+}
+
+enum Role {
+  USER
+  ADMIN
+}
+
+enum FeatureStatus {
+  PLANNED
+  IN_PROGRESS
+  SHIPPED
+}
+
+model User {
+  id           String    @id @default(uuid()) @db.Uuid
+  email        String    @unique @db.VarChar(254)
+  name         String    @db.VarChar(80)
+  passwordHash String    @db.VarChar(100)
+  role         Role      @default(USER)
+  createdAt    DateTime  @default(now()) @db.Timestamptz(3)
+  features     Feature[]
+  votes        Vote[]
+  sessions     Session[]
+}
+
+model Feature {
+  id        String        @id @default(uuid()) @db.Uuid
+  title     String        @db.VarChar(160)
+  authorId  String        @db.Uuid
+  status    FeatureStatus @default(PLANNED)
+  createdAt DateTime      @default(now()) @db.Timestamptz(3)
+  updatedAt DateTime      @updatedAt @db.Timestamptz(3)
+  author    User          @relation(fields: [authorId], references: [id], onDelete: Restrict)
+  votes     Vote[]
+
+  @@index([status, createdAt])
+  @@index([createdAt])
+}
+
+model Vote {
+  id        String   @id @default(uuid()) @db.Uuid
+  featureId String   @db.Uuid
+  userId    String   @db.Uuid
+  createdAt DateTime @default(now()) @db.Timestamptz(3)
+  feature   Feature  @relation(fields: [featureId], references: [id], onDelete: Cascade)
+  user      User     @relation(fields: [userId], references: [id], onDelete: Cascade)
+
+  @@unique([featureId, userId])
+  @@index([userId])
+}
+
+model Session {
+  tokenHash String   @id @db.Char(64)
+  userId    String   @db.Uuid
+  expiresAt DateTime @db.Timestamptz(3)
+  createdAt DateTime @default(now()) @db.Timestamptz(3)
+  user      User     @relation(fields: [userId], references: [id], onDelete: Cascade)
+
+  @@index([userId])
+  @@index([expiresAt])
+}

@@ -1,0 +1,91 @@
+@import "tailwindcss";
+
+@theme {
+  --color-background: #f8fafc;
+  --color-foreground: #1e293b;
+  --color-card: #ffffff;
+  --color-card-foreground: #1e293b;
+  --color-primary: #2563eb;
+  --color-primary-foreground: #ffffff;
+  --color-secondary: #3b82f6;
+  --color-secondary-foreground: #000000;
+  --color-accent: #ea580c;
+  --color-accent-foreground: #000000;
+  --color-muted: #e9eff8;
+  --color-muted-foreground: #475569;
+  --color-border: #e2e8f0;
+  --color-ring: #2563eb;
+  --color-destructive: #dc2626;
+  --color-destructive-foreground: #ffffff;
+  --color-success: #15803d;
+  --color-warning: #b45309;
+  --color-info: #1d4ed8;
+  --font-heading: "Inter", sans-serif;
+  --font-sans: "Inter", sans-serif;
+  --radius-control: 8px;
+  --radius-container: calc(var(--radius-control) + 4px);
+}
+
+:root {
+  color-scheme: light;
+  font-family: var(--font-sans);
+  font-synthesis: none;
+  text-rendering: optimizeLegibility;
+}
+
+@media (prefers-color-scheme: dark) {
+  :root {
+    color-scheme: dark;
+    --color-background: #0f172a;
+    --color-foreground: #f1f5f9;
+    --color-card: #1e293b;
+    --color-card-foreground: #f1f5f9;
+    --color-primary: #60a5fa;
+    --color-primary-foreground: #0f172a;
+    --color-secondary: #1e3a8a;
+    --color-secondary-foreground: #f8fafc;
+    --color-accent: #fb923c;
+    --color-accent-foreground: #1e293b;
+    --color-muted: #334155;
+    --color-muted-foreground: #cbd5e1;
+    --color-border: #475569;
+    --color-ring: #93c5fd;
+    --color-destructive: #f87171;
+    --color-destructive-foreground: #1e293b;
+    --color-success: #4ade80;
+    --color-warning: #fbbf24;
+    --color-info: #60a5fa;
+  }
+}
+
+@keyframes rise-in {
+  from {
+    opacity: 0;
+    transform: translateY(8px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+@utility animate-rise {
+  animation: rise-in 240ms ease-out both;
+}
+
+@layer base {
+  html {
+    min-width: 320px;
+  }
+  body {
+    min-height: 100vh;
+    background: var(--color-background);
+    color: var(--color-foreground);
+    font-family: var(--font-sans);
+    -webkit-font-smoothing: antialiased;
+  }
+  :focus-visible {
+    outline: 2px solid var(--color-ring);
+    outline-offset: 2px;
+  }
+}
