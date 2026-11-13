@@ -1,0 +1,64 @@
+generator client {
+  provider = "prisma-client"
+  output   = "../server/src/generated/prisma"
+}
+
+datasource db {
+  provider = "postgresql"
+}
+
+enum FeatureStatus {
+  PLANNED
+  IN_PROGRESS
+  SHIPPED
+}
+
+model User {
+  id           String    @id @default(uuid()) @db.Uuid
+  name         String    @db.VarChar(80)
+  email        String    @unique @db.VarChar(320)
+  passwordHash String    @db.VarChar(255)
+  createdAt    DateTime  @default(now()) @db.Timestamptz(3)
+  sessions     Session[]
+  features     Feature[]
+  votes        Vote[]
+}
+
+model Session {
+  id        String   @id @default(uuid()) @db.Uuid
+  tokenHash String   @unique @db.Char(64)
+  userId    String   @db.Uuid
+  expiresAt DateTime @db.Timestamptz(3)
+  createdAt DateTime @default(now()) @db.Timestamptz(3)
+  user      User     @relation(fields: [userId], references: [id], onDelete: Cascade, onUpdate: Cascade)
+
+  @@index([userId])
+  @@index([expiresAt])
+}
+
+model Feature {
+  id          String        @id @default(uuid()) @db.Uuid
+  title       String        @db.VarChar(120)
+  description String        @db.Text
+  status      FeatureStatus @default(PLANNED)
+  authorId    String        @db.Uuid
+  createdAt   DateTime      @default(now()) @db.Timestamptz(3)
+  updatedAt   DateTime      @updatedAt @db.Timestamptz(3)
+  author      User          @relation(fields: [authorId], references: [id], onDelete: Cascade, onUpdate: Cascade)
+  votes       Vote[]
+
+  @@index([status, createdAt])
+  @@index([createdAt])
+}
+
+model Vote {
+  id        String   @id @default(uuid()) @db.Uuid
+  userId    String   @db.Uuid
+  featureId String   @db.Uuid
+  createdAt DateTime @default(now()) @db.Timestamptz(3)
+  user      User     @relation(fields: [userId], references: [id], onDelete: Cascade, onUpdate: Cascade)
+  feature   Feature  @relation(fields: [featureId], references: [id], onDelete: Cascade, onUpdate: Cascade)
+
+  @@unique([userId, featureId])
+  @@index([featureId])
+}
