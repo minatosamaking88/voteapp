@@ -1,0 +1,33 @@
+generator client {
+  provider = "prisma-client"
+  output   = "../src/generated/prisma"
+}
+
+datasource db {
+  provider = "postgresql"
+}
+
+enum UserRole {
+  USER
+  ADMIN
+}
+
+model User {
+  id           String   @id @default(uuid()) @db.Uuid
+  name         String   @db.VarChar(80)
+  email        String   @unique(map: "users_email_key") @db.VarChar(254)
+  passwordHash String   @db.Text
+  role         UserRole @default(USER)
+  createdAt    DateTime @default(now()) @db.Timestamptz(6)
+
+  @@map("users")
+}
+
+model Session {
+  sid    String   @id @db.VarChar(255)
+  sess   Json     @db.JsonB
+  expire DateTime @db.Timestamptz(6)
+
+  @@index([expire], map: "IDX_session_expire")
+  @@map("session")
+}

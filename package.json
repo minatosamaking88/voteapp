@@ -1,0 +1,29 @@
+{
+  "name": "featurevote",
+  "private": true,
+  "version": "1.0.0",
+  "workspaces": [
+    "frontend",
+    "backend"
+  ],
+  "overrides": {
+    "minimatch": "^11.0.8"
+  },
+  "scripts": {
+    "dev": "concurrently -k -n backend,frontend -c blue,magenta \"npm run dev -w backend\" \"npm run dev -w frontend\"",
+    "typecheck": "npm run typecheck --workspaces --if-present",
+    "lint": "eslint . --max-warnings=0",
+    "test": "npm run test --workspace backend",
+    "build": "npm run build --workspace backend && npm run build --workspace frontend",
+    "format": "npm run db:format --workspace backend && prettier --write package.json tsconfig.base.json eslint.config.mjs .prettierrc.json docker-compose.yml README.md backend/package.json backend/prisma.config.ts backend/tsconfig*.json backend/vitest.config.ts \"backend/src/**/*.ts\" \"backend/test/**/*.ts\" frontend/package.json frontend/tsconfig.json frontend/vite.config.ts \"frontend/**/*.{ts,tsx,css,html}\""
+  },
+  "devDependencies": {
+    "@eslint/js": "^10.0.1",
+    "@types/node": "^26.6.6",
+    "concurrently": "^10.0.7",
+    "eslint": "^10.14.0",
+    "globals": "^17.14.0",
+    "prettier": "^3.10.1",
+    "typescript-eslint": "^8.72.2"
+  }
+}
