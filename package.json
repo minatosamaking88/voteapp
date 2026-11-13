@@ -1,0 +1,36 @@
+{
+  "name": "featurevote",
+  "private": true,
+  "type": "module",
+  "workspaces": [
+    "client",
+    "server",
+    "packages/shared"
+  ],
+  "scripts": {
+    "dev": "concurrently --kill-others -n api,web \"npm:dev:api\" \"npm:dev:web\"",
+    "dev:api": "npm run dev --workspace @featurevote/server",
+    "dev:web": "npm run dev --workspace @featurevote/client",
+    "type-check": "npm run type-check --workspace @featurevote/shared && npm run type-check --workspace @featurevote/server && npm run type-check --workspace @featurevote/client && tsc --noEmit -p tsconfig.tools.json",
+    "lint": "oxlint client/src server/src packages/shared/src",
+    "test": "node scripts/run-integration-tests.mjs",
+    "build": "npm run build --workspace @featurevote/server && npm run build --workspace @featurevote/client",
+    "db:migrate": "prisma migrate deploy",
+    "db:migrate:dev": "prisma migrate dev",
+    "db:seed": "tsx prisma/seed.ts",
+    "format": "prettier --write \"client/src/**/*.{ts,tsx,css}\" \"server/src/**/*.ts\" \"server/tests/**/*.ts\" \"packages/shared/src/**/*.ts\" \"prisma/**/*.ts\" \"scripts/**/*.mjs\" \"client/*.{html,json,ts}\" \"server/*.json\" \"packages/shared/*.json\" \"*.{json,ts,mjs}\""
+  },
+  "devDependencies": {
+    "@types/node": "^24.19.2",
+    "@types/supertest": "^6.0.3",
+    "concurrently": "^9.2.1",
+    "dotenv": "^17.2.3",
+    "oxlint": "^1.90.0",
+    "prettier": "^3.6.2",
+    "prisma": "^7.0.0",
+    "supertest": "^7.1.4",
+    "tsx": "^4.20.6",
+    "typescript": "~7.0.2",
+    "vitest": "^4.0.8"
+  }
+}

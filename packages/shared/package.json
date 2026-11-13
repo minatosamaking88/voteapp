@@ -1,0 +1,15 @@
+{
+  "name": "@featurevote/shared",
+  "private": true,
+  "version": "1.0.0",
+  "type": "module",
+  "exports": {
+    "./contracts": "./src/contracts.ts"
+  },
+  "dependencies": {
+    "zod": "^4.1.12"
+  },
+  "scripts": {
+    "type-check": "tsc --noEmit -p tsconfig.json"
+  }
+}
